@@ -8,16 +8,17 @@ const addTaskForm = document.querySelector("#addTaskForm");
 const filters = document.querySelector(".filters");
 const itemsLeft = document.querySelector(".itemsLeft");
 const toggleAll = document.querySelector(".arr");
+let currentFilter = "all";
 itemsLeft.innerHTML = `${functions.renderAllTask(taskListContainer)} item${functions.renderAllTask(taskListContainer) > 1? "s" : ""} left`;
 
 
-addTaskForm.addEventListener("submit", (e) => functions.newTask(e, addTaskInput, taskListContainer));
+addTaskForm.addEventListener("submit", (e) => functions.newTask(e, addTaskInput, taskListContainer, currentFilter));
 
 
 taskListContainer.addEventListener("click", (e) => {
     if (e.target.classList.contains("delete")) {
         const id = e.target.getAttribute("data-id");
-        functions.removeTask(id, taskListContainer);
+        functions.removeTask(id, taskListContainer, currentFilter);
     }
 });
 
@@ -29,12 +30,15 @@ filters.addEventListener("click", (e) => {
     };
 
     if (e.target.textContent === "Active") {
+        currentFilter = "active";
         functions.activeTasks(taskListContainer);
         itemsLeft.innerHTML = `${functions.activeTasks(taskListContainer)} item${functions.activeTasks(taskListContainer) > 1? "s" : ""} left` ;
     } else if (e.target.textContent === "Completed") {
+        currentFilter = "completed";
         functions.completedTasks(taskListContainer);
         itemsLeft.innerHTML = `${functions.completedTasks(taskListContainer)} item${functions.completedTasks(taskListContainer) > 1? "s" : ""} left` ;
     } else {
+        currentFilter = "all";
         functions.renderAllTask(taskListContainer);
         itemsLeft.innerHTML = `${functions.renderAllTask(taskListContainer)} item${functions.renderAllTask(taskListContainer) > 1? "s" : ""} left` ;
     }

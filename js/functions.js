@@ -15,7 +15,7 @@ export const renderAllTask = (taskListContainer) => {
     return taskList.length;
 } 
 
-export const newTask = (e, addTaskInput, taskListContainer) => {
+export const newTask = (e, addTaskInput, taskListContainer, currentFilter) => {
     e.preventDefault();
 
     if(addTaskInput.value) {
@@ -26,17 +26,30 @@ export const newTask = (e, addTaskInput, taskListContainer) => {
         };
 
         taskList = [...taskList, newTaskValue];
-        renderAllTask(taskListContainer);
+        // renderAllTask(taskListContainer);
+
+        if (currentFilter === "active") {
+            activeTasks(taskListContainer);
+        } else if (currentFilter === "completed") {
+            completedTasks(taskListContainer);
+        } else {
+            renderAllTask(taskListContainer);
+        }
         addTaskInput.value = ""
     }
 
 }
 
-export const removeTask = (theId, taskListContainer) =>  {
+export const removeTask = (theId, taskListContainer, currentFilter) =>  {
     taskList = taskList.filter(task => task.id !== theId);
-    renderAllTask(taskListContainer);
-    
-    console.log(taskList)
+
+    if (currentFilter === "active") {
+        activeTasks(taskListContainer);
+    } else if (currentFilter === "completed") {
+        completedTasks(taskListContainer);
+    } else {
+        renderAllTask(taskListContainer);
+    }
 }
 
 export const activeTasks = (taskListContainer) => {
