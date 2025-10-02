@@ -8,17 +8,28 @@ const addTaskForm = document.querySelector("#addTaskForm");
 const filters = document.querySelector(".filters");
 const itemsLeft = document.querySelector(".itemsLeft");
 const toggleAll = document.querySelector(".arr");
+// const editInputs = document.querySelectorAll("")
+let tasksName = document.querySelectorAll("label");
 let currentFilter = "all";
-itemsLeft.innerHTML = `${functions.renderAllTask(taskListContainer)} item${functions.renderAllTask(taskListContainer) > 1? "s" : ""} left`;
 
 
-addTaskForm.addEventListener("submit", (e) => functions.newTask(e, addTaskInput, taskListContainer, currentFilter));
+
+
+addTaskForm.addEventListener("submit", (e) => functions.newTask(e, addTaskInput, taskListContainer, currentFilter, itemsLeft, tasksName));
 
 
 taskListContainer.addEventListener("click", (e) => {
     if (e.target.classList.contains("delete")) {
         const id = e.target.getAttribute("data-id");
-        functions.removeTask(id, taskListContainer, currentFilter);
+        functions.removeTask(id, taskListContainer, currentFilter, itemsLeft);
+    }
+});
+
+taskListContainer.addEventListener("dblclick", (e) => {
+    if (e.target.tagName === "LABEL") {
+        const theId = e.target.getAttribute("data-id");
+        const theValue = e.target.textContent;
+        functions.changeTaskName(theId, theValue, currentFilter, taskListContainer);
     }
 });
 
@@ -31,22 +42,19 @@ filters.addEventListener("click", (e) => {
 
     if (e.target.textContent === "Active") {
         currentFilter = "active";
-        functions.activeTasks(taskListContainer);
-        itemsLeft.innerHTML = `${functions.activeTasks(taskListContainer)} item${functions.activeTasks(taskListContainer) > 1? "s" : ""} left` ;
+        functions.activeTasks(taskListContainer, itemsLeft);
     } else if (e.target.textContent === "Completed") {
         currentFilter = "completed";
-        functions.completedTasks(taskListContainer);
-        itemsLeft.innerHTML = `${functions.completedTasks(taskListContainer)} item${functions.completedTasks(taskListContainer) > 1? "s" : ""} left` ;
+        functions.completedTasks(taskListContainer, itemsLeft);
     } else {
         currentFilter = "all";
-        functions.renderAllTask(taskListContainer);
-        itemsLeft.innerHTML = `${functions.renderAllTask(taskListContainer)} item${functions.renderAllTask(taskListContainer) > 1? "s" : ""} left` ;
+        functions.renderAllTask(taskListContainer, tasksName);
     }
 })
 
 taskListContainer.addEventListener("click", (e) => {
     if (e.target.matches('input[type="checkbox"]')) {
-        functions.changeTaskStatus(e.target.dataset.id, taskListContainer);
+        functions.changeTaskStatus(e.target.dataset.id, taskListContainer, currentFilter);
     }
 });
 
@@ -56,3 +64,7 @@ toggleAll.addEventListener("click", (e) => {
 })
 
 
+tasksName.forEach(task => task.addEventListener("dblclick", (e) => {
+    // functions.changeTaskName()
+    alert("Hello")
+}))
